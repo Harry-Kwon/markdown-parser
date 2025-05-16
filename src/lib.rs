@@ -1,10 +1,17 @@
 pub mod parser;
-mod blocks;
+mod ast;
+use ast::*;
 
-use blocks::Block;
-
-pub fn parse_markdown(text: &str) -> impl Block {
-    let md_parser = parser::Parser{};
-    let ast = md_parser.parse_markdown(text);
+pub fn parse_markdown(text: &str) -> Box<dyn Block + '_>{
+    let ast = parser::parse_markdown(text);
     return ast;
+}
+
+pub fn ast_to_html<'a>(root: &impl Block<'a>) -> String {
+    return root.into_html()
+}
+
+pub fn markdown_to_html(text: &str) -> String {
+    let ast = parser::parse_markdown(text);
+    return ast.into_html();
 }
